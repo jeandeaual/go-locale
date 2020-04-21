@@ -1,5 +1,9 @@
 # go-locale
 
+[![GoDoc](https://godoc.org/github.com/jeandeaual/go-locale?status.svg)](https://godoc.org/github.com/jeandeaual/go-locale)
+[![test](https://github.com/jeandeaual/go-locale/workflows/test/badge.svg)](https://github.com/jeandeaual/go-locale/actions?query=workflow%3Atest)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jeandeaual/go-locale)](https://goreportcard.com/report/github.com/jeandeaual/go-locale)
+
 GoLang library used to retrieve the current locale(s) of the operating system.
 
 ## OS Support
