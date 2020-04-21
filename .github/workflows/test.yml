@@ -17,6 +17,10 @@ jobs:
         id: go
       - name: Build
         run: go build -ldflags="-s -w" ./cmd/getlocale
+      - name: Build (WASM)
+        if: startsWith(matrix.os, 'ubuntu')
+        # Try to build the WASM executable once (on Ubuntu)
+        run: GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o getlocale.wasm ./cmd/getlocale
       - name: Set locale
         if: startsWith(matrix.os, 'macos')
         # Manually set the AppleLanguages on macOS
@@ -36,14 +40,14 @@ jobs:
       - name: Get dependencies
         if: startsWith(matrix.os, 'windows') != true
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/bin v1.24.0
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/bin "v1.24.0"
       - name: Get dependencies
         if: startsWith(matrix.os, 'windows')
         run: |
-          Invoke-WebRequest https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-windows-amd64.zip -OutFile golangci-lint.zip
-          Expand-Archive golangci-lint.zip -DestinationPath .
+          Invoke-WebRequest "https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-windows-amd64.zip" -OutFile "golangci-lint.zip"
+          Expand-Archive "golangci-lint.zip" -DestinationPath "."
           New-Item -ItemType Directory -Path "~\bin"
-          Move-Item -Path golangci-lint-1.24.0-windows-amd64\golangci-lint.exe -Destination ~\bin\
+          Move-Item -Path "golangci-lint-1.24.0-windows-amd64\golangci-lint.exe" -Destination "~\bin\"
         shell: pwsh
       - name: Run golangci-lint
         run: ~/bin/golangci-lint run
