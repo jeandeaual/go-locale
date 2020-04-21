@@ -19,3 +19,13 @@ jobs:
         run: go build -ldflags="-s -w" ./cmd/getlocale
       - name: Test
         run: go test -v -race
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Get dependencies
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/bin v1.24.0
+      - name: Run golangci-lint
+        run: ~/bin/golangci-lint run
