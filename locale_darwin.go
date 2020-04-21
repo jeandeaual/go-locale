@@ -12,7 +12,7 @@ import (
 func GetLocale() (string, error) {
 	_, output, err := execCommand("defaults", "read", "-g", "AppleLocale")
 	if err != nil {
-		return "", fmt.Errorf("cannot determine locale: %w", err)
+		return "", fmt.Errorf("cannot determine locale: %w (output: %s)", err, output)
 	}
 
 	return strings.TrimRight(strings.Replace(string(output), "_", "-", 1), "\n"), nil

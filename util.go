@@ -11,7 +11,7 @@ func execCommand(cmd string, args ...string) (status int, out []byte, err error)
 	command := exec.Command(cmd, args...)
 
 	// Execute the command and get the standard and error outputs
-	out, err = command.Output()
+	out, err = command.CombinedOutput()
 	if err != nil {
 		return
 	}
