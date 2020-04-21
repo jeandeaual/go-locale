@@ -5,13 +5,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        go: ['1.13.x', '1.14.x']
+        go: ['^1.12', '^1.13', '^1.14']
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Set up Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
         id: go

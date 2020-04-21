@@ -11,7 +11,7 @@ import (
 func GetLocale() (string, error) {
 	_, output, err := execCommand("powershell", "Get-Culture | select -exp IetfLanguageTag")
 	if err != nil {
-		return "", fmt.Errorf("cannot determine locale: %w (output: %s)", err, output)
+		return "", fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
 	}
 
 	return strings.TrimRight(string(output), "\r\n"), nil
