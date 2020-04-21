@@ -4,15 +4,16 @@ GoLang library used to retrieve the current locale(s) of the operating system.
 
 ## OS Support
 
-* Windows, using Powershell's `Get-Culture`
-* macOS, using `defaults read -g AppleLocale` and `defaults read -g AppleLanguages`
-* Unix, using the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES` and `LANG` environment variables.
+* Windows, using Powershell's `Get-Culture`.
+* macOS, using `defaults read -g AppleLocale` and `defaults read -g AppleLanguages` (since environment variables like `LANG` are not usually set on macOS).
+* WASM (JavaScript), using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
+* Unix-like systems (Linux, BSD, etc.), using the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES` and `LANG` environment variables.
 
 ## Usage
 
 ## GetLocale
 
-`GetLocale` returns the current locale as an [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) string (e.g. `"en-US"`).
+`GetLocale` returns the current locale as defined in [BCP 47](https://tools.ietf.org/rfc/bcp/bcp47.txt) (e.g. `"en-US"`).
 
 ```golang
 userLocale, err := locale.GetLocale()
