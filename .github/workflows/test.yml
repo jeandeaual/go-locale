@@ -4,7 +4,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         go: ['^1.12', '^1.13', '^1.14']
     runs-on: ${{ matrix.os }}
     steps:
@@ -17,6 +17,12 @@ jobs:
         id: go
       - name: Build
         run: go build -ldflags="-s -w" ./cmd/getlocale
+      - name: Set locale
+        if: startsWith(matrix.os, 'macos')
+        # Manually set the AppleLanguages on macOS
+        # Otherwise, we get the following error when running GetLocales():
+        # The domain/default pair of (kCFPreferencesAnyApplication, AppleLanguages) does not exist
+        run: defaults write NSGlobalDomain AppleLanguages "(en-US, fr-FR, ja-JP)"
       - name: Test
         run: go test -v -race
   lint:

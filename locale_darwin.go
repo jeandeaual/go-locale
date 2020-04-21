@@ -31,7 +31,7 @@ var appleLanguagesRegex = regexp.MustCompile(`"([a-z]{2}-[A-Z]{2})"`)
 func GetLocales() ([]string, error) {
 	_, output, err := execCommand("defaults", "read", "-g", "AppleLanguages")
 	if err != nil {
-		return nil, fmt.Errorf("cannot determine locale: %v (output: %s)", err)
+		return nil, fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
 	}
 
 	matches := appleLanguagesRegex.FindAllStringSubmatch(string(output), -1)
