@@ -26,12 +26,24 @@ jobs:
       - name: Test
         run: go test -v -race
   lint:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Get dependencies
+        if: startsWith(matrix.os, 'windows') != true
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/bin v1.24.0
+      - name: Get dependencies
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          Invoke-WebRequest https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-windows-amd64.zip -OutFile golangci-lint.zip
+          Expand-Archive golangci-lint.zip -DestinationPath .
+          New-Item -ItemType Directory -Path "~\bin"
+          Move-Item -Path golangci-lint-1.24.0-windows-amd64\golangci-lint.exe -Destination ~\bin\
+        shell: pwsh
       - name: Run golangci-lint
         run: ~/bin/golangci-lint run
