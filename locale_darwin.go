@@ -18,6 +18,13 @@ func GetLocale() (string, error) {
 	return strings.TrimRight(strings.Replace(string(output), "_", "-", 1), "\n"), nil
 }
 
+// appleLanguagesRegex is used to parse the output of "defaults read -g AppleLanguages"
+// e.g.:
+// (
+//     "en-US",
+//     "fr-FR",
+//     "ja-JP"
+// )
 var appleLanguagesRegex = regexp.MustCompile(`"([a-z]{2}-[A-Z]{2})"`)
 
 // GetLocales retrieves the IETF BCP 47 language tags set on the system.
