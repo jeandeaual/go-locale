@@ -9,8 +9,9 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-// See https://docs.microsoft.com/en-us/windows/win32/intl/locale-name-constants
-const LOCALE_NAME_MAX_LENGTH uint32 = 85
+// LocaleNameMaxLength is the maximum length of a locale name on Windows.
+// See https://docs.microsoft.com/en-us/windows/win32/intl/locale-name-constants.
+const LocaleNameMaxLength uint32 = 85
 
 func getWindowsLocaleFromProc(syscall string) (string, error) {
 	dll, err := windows.LoadDLL("kernel32")
@@ -23,13 +24,13 @@ func getWindowsLocaleFromProc(syscall string) (string, error) {
 		return "", fmt.Errorf("could not find the %s proc in kernel32: %v", syscall, err)
 	}
 
-	buffer := make([]uint16, LOCALE_NAME_MAX_LENGTH)
+	buffer := make([]uint16, LocaleNameMaxLength)
 
 	// See https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocalename
 	// and https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocalename
 	// GetUserDefaultLocaleName and GetSystemDefaultLocaleName both take a buffer and a buffer size,
 	// and return the length of the locale name (0 if not found).
-	ret, _, err := proc.Call(uintptr(unsafe.Pointer(&buffer[0])), uintptr(LOCALE_NAME_MAX_LENGTH))
+	ret, _, err := proc.Call(uintptr(unsafe.Pointer(&buffer[0])), uintptr(LocaleNameMaxLength))
 	if ret == 0 {
 		return "", fmt.Errorf("locale not found when calling %s: %v", syscall, err)
 	}
