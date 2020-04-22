@@ -8,7 +8,7 @@ GoLang library used to retrieve the current locale(s) of the operating system.
 
 ## OS Support
 
-* Windows, using Powershell's `Get-Culture`.
+* Windows, using [GetUserDefaultLocaleName](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocalename) and [GetSystemDefaultLocaleName](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocalename).
 * macOS, using `defaults read -g AppleLocale` and `defaults read -g AppleLanguages` (since environment variables like `LANG` are not usually set on macOS).
 * WASM (JavaScript), using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
 * Unix-like systems (Linux, BSD, etc.), using the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES` and `LANG` environment variables.

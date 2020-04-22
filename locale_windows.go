@@ -4,17 +4,63 @@ package locale
 
 import (
 	"fmt"
-	"strings"
+	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
+
+// See https://docs.microsoft.com/en-us/windows/win32/intl/locale-name-constants
+const LOCALE_NAME_MAX_LENGTH uint32 = 85
+
+func getWindowsLocaleFromProc(syscall string) (string, error) {
+	dll, err := windows.LoadDLL("kernel32")
+	if err != nil {
+		return "", fmt.Errorf("could not find the kernel32 DLL: %v", err)
+	}
+
+	proc, err := dll.FindProc(syscall)
+	if err != nil {
+		return "", fmt.Errorf("could not find the %s proc in kernel32: %v", syscall, err)
+	}
+
+	buffer := make([]uint16, LOCALE_NAME_MAX_LENGTH)
+
+	// See https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocalename
+	// and https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocalename
+	// GetUserDefaultLocaleName and GetSystemDefaultLocaleName both take a buffer and a buffer size,
+	// and return the length of the locale name (0 if not found).
+	ret, _, err := proc.Call(uintptr(unsafe.Pointer(&buffer[0])), uintptr(LOCALE_NAME_MAX_LENGTH))
+	if ret == 0 {
+		return "", fmt.Errorf("locale not found when calling %s: %v", syscall, err)
+	}
+
+	return windows.UTF16ToString(buffer), nil
+}
+
+func getWindowsLocale() (string, error) {
+	var (
+		locale string
+		err    error
+	)
+
+	for _, proc := range [...]string{"GetUserDefaultLocaleName", "GetSystemDefaultLocaleName"} {
+		locale, err = getWindowsLocaleFromProc(proc)
+		if err == nil {
+			return locale, err
+		}
+	}
+
+	return locale, err
+}
 
 // GetLocale retrieves the IETF BCP 47 language tag set on the system.
 func GetLocale() (string, error) {
-	_, output, err := execCommand("powershell", "Get-Culture | select -exp IetfLanguageTag")
+	locale, err := getWindowsLocale()
 	if err != nil {
-		return "", fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
+		return "", fmt.Errorf("cannot determine locale: %v", err)
 	}
 
-	return strings.TrimRight(string(output), "\r\n"), nil
+	return locale, err
 }
 
 // GetLocales retrieves the IETF BCP 47 language tags set on the system.
