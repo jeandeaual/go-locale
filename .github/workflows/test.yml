@@ -21,14 +21,27 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         # Try to build the WASM executable once (on Ubuntu)
         run: GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o getlocale.wasm ./cmd/getlocale
-      - name: Set locale
+      - name: Set locale (macOS)
         if: startsWith(matrix.os, 'macos')
         # Manually set the AppleLanguages on macOS
         # Otherwise, we get the following error when running GetLocales():
         # The domain/default pair of (kCFPreferencesAnyApplication, AppleLanguages) does not exist
         run: defaults write NSGlobalDomain AppleLanguages "(en-US, fr-FR, ja-JP)"
       - name: Test
-        run: go test -v -race
+        run: go test -v -race -covermode=atomic -coverprofile=profile.cov
+      - name: Send coverage
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: profile.cov
+          parallel: true
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send post build webhook to Coveralls
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          parallel-finished: true
   lint:
     strategy:
       matrix:
