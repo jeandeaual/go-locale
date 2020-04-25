@@ -35,15 +35,15 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     env:
-      GOLANGCI_LINT_VERSION: '1.24.0'
+      GOLANGCI_LINT_VERSION: '1.25.0'
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: Get dependencies
+      - name: Download golangci-lint
         if: startsWith(matrix.os, 'windows') != true
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/bin "v${GOLANGCI_LINT_VERSION}"
-      - name: Get dependencies
+      - name: Download golangci-lint
         if: startsWith(matrix.os, 'windows')
         run: |
           Invoke-WebRequest "https://github.com/golangci/golangci-lint/releases/download/v${env:GOLANGCI_LINT_VERSION}/golangci-lint-${env:GOLANGCI_LINT_VERSION}-windows-amd64.zip" -OutFile "golangci-lint.zip"
@@ -51,4 +51,4 @@ jobs:
           New-Item -ItemType Directory -Path "~\bin"
           Move-Item -Path "golangci-lint-${env:GOLANGCI_LINT_VERSION}-windows-amd64\golangci-lint.exe" -Destination "~\bin\"
       - name: Run golangci-lint
-        run: ~/bin/golangci-lint run
+        run: ~/bin/golangci-lint run --out-format github-actions
