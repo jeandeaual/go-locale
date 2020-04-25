@@ -28,7 +28,7 @@ jobs:
         # The domain/default pair of (kCFPreferencesAnyApplication, AppleLanguages) does not exist
         run: defaults write NSGlobalDomain AppleLanguages "(en-US, fr-FR, ja-JP)"
       - name: Test
-        run: go test -v -race -covermode=atomic -coverprofile=profile.cov
+        run: go test -v -race -covermode="atomic" -coverprofile="profile.cov"
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
         with:
