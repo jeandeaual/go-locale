@@ -10,35 +10,42 @@ GoLang library used to retrieve the current locale(s) of the operating system.
 
 ## OS Support
 
-* Windows, using [`GetUserDefaultLocaleName`](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocalename) and [`GetSystemDefaultLocaleName`](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocalename).
-* macOS, using `defaults read -g AppleLocale` and `defaults read -g AppleLanguages` (since environment variables like `LANG` are not usually set on macOS).
-* Unix-like systems (Linux, BSD, etc.), using the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES` and `LANG` environment variables.
-* WASM (JavaScript), using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
-* iOS, using [`[NSLocale preferredLanguages]`](https://developer.apple.com/documentation/foundation/nslocale/1415614-preferredlanguages).
-* Android, using [`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale) otherwise.
-    * Note: for Android, you'll first need to call `SetRunOnJVM`, depending on which mobile framework you're using:
-        * For [Fyne](https://fyne.io/):
-            ```go
-            import (
-                "github.com/fyne-io/mobile/app"
-                "github.com/jeandeaual/go-locale"
-            )
+* Windows\
+    Using [`GetUserDefaultLocaleName`](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocalename) and [`GetSystemDefaultLocaleName`](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocalename).
+* macOS\
+    Using `defaults read -g AppleLocale` and `defaults read -g AppleLanguages` (since environment variables like `LANG` are not usually set on macOS).
+* Unix-like systems (Linux, BSD, etc.)\
+    Using the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES` and `LANG` environment variables.
+* WASM (JavaScript)\
+    Using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
+* iOS\
+    Using [`[NSLocale preferredLanguages]`](https://developer.apple.com/documentation/foundation/nslocale/1415614-preferredlanguages).
+* Android\
+    Using [`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale) otherwise.
 
-            func init() {
-                locale.SetRunOnJVM(app.RunOnJVM)
-            }
-            ```
-        * For [gomobile](https://github.com/golang/go/wiki/Mobile):
-            ```go
-            import (
-                "golang.org/x/mobile/app"
-                "github.com/jeandeaual/go-locale"
-            )
+    Note: for Android, you'll first need to call `SetRunOnJVM`, depending on which mobile framework you're using:
+    * For [Fyne](https://fyne.io/):
+        ```go
+        import (
+            "github.com/fyne-io/mobile/app"
+            "github.com/jeandeaual/go-locale"
+        )
 
-            func init() {
-                locale.SetRunOnJVM(app.RunOnJVM)
-            }
-            ```
+        func init() {
+            locale.SetRunOnJVM(app.RunOnJVM)
+        }
+        ```
+    * For [gomobile](https://github.com/golang/go/wiki/Mobile):
+        ```go
+        import (
+            "golang.org/x/mobile/app"
+            "github.com/jeandeaual/go-locale"
+        )
+
+        func init() {
+            locale.SetRunOnJVM(app.RunOnJVM)
+        }
+        ```
 
 ## Usage
 
@@ -59,9 +66,34 @@ if err == nil {
 This can be used with [golang.org/x/text](https://godoc.org/golang.org/x/text) or [go-i18n](https://github.com/nicksnyder/go-i18n) to set the localizer's language preferences:
 
 ```golang
-userLocales, _ := locale.GetLocales()
-localizer := i18n.NewLocalizer(bundle, userLocales...)
+import (
+    "github.com/jeandeaual/go-locale"
+    "golang.org/x/text/message"
+)
+
+func main() {
+    userLocales, _ := locale.GetLocales()
+    p := message.NewPrinter(message.MatchLanguage(userLocales...))
+    ...
+}
 ```
+
+```golang
+import (
+    "github.com/jeandeaual/go-locale"
+    "github.com/nicksnyder/go-i18n/v2/i18n"
+    "golang.org/x/text/language"
+)
+
+func main() {
+    userLocales, _ := locale.GetLocales()
+    bundle := i18n.NewBundle(language.English)
+    localizer := i18n.NewLocalizer(bundle, userLocales...)
+    ...
+}
+```
+
+For a complete example, see [here](examples/getlocale-mobile/main.go).
 
 ## GetLocale
 
