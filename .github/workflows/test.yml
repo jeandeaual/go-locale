@@ -16,11 +16,11 @@ jobs:
           go-version: ${{ matrix.go }}
         id: go
       - name: Build
-        run: go build -ldflags="-s -w" ./cmd/getlocale
+        run: go build -ldflags="-s -w" ./examples/getlocale
       - name: Build (WASM)
         if: startsWith(matrix.os, 'ubuntu')
         # Try to build the WASM executable once (on Ubuntu)
-        run: GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o getlocale.wasm ./cmd/getlocale
+        run: GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o getlocale.wasm ./examples/getlocale
       - name: Set locale (macOS)
         if: startsWith(matrix.os, 'macos')
         # Manually set the AppleLanguages on macOS
