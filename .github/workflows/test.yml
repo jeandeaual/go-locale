@@ -64,4 +64,4 @@ jobs:
           New-Item -ItemType Directory -Path "~\bin"
           Move-Item -Path "golangci-lint-${env:GOLANGCI_LINT_VERSION}-windows-amd64\golangci-lint.exe" -Destination "~\bin\"
       - name: Run golangci-lint
-        run: ~/bin/golangci-lint run --out-format github-actions
+        run: ~/bin/golangci-lint run --out-format github-actions .
