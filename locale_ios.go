@@ -1,6 +1,6 @@
 // +build ios
 
-package main
+package locale
 
 /*
 #cgo CFLAGS: -x objective-c
