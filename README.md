@@ -93,7 +93,7 @@ func main() {
 }
 ```
 
-For a complete example, see [here](examples/getlocale-mobile/main.go).
+For a complete example, see [here](examples/getlocale-gui/main.go).
 
 ## GetLocale
 

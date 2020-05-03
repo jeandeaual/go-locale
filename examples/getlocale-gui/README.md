@@ -1,8 +1,8 @@
-# Mobile Test Application
+# GUI Test Application
 
 ## Building
 
-First, install the fyne command:
+First, install the `fyne` command:
 
 ```sh
 $ GO111MODULE=off go get fyne.io/fyne/cmd/fyne
@@ -20,6 +20,12 @@ Then, build the example program:
 
     ```sh
     $ fyne package -os android -appID com.example.myapp -icon icon.png
+    ```
+
+* On desktop:
+
+    ```sh
+    $ go build
     ```
 
 For more information, see [the Fyne documentation](https://fyne.io/develop/distribution).
