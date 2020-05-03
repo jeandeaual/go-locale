@@ -12,10 +12,10 @@ GoLang library used to retrieve the current locale(s) of the operating system.
 
 * Windows, using [`GetUserDefaultLocaleName`](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlocalename) and [`GetSystemDefaultLocaleName`](https://docs.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlocalename).
 * macOS, using `defaults read -g AppleLocale` and `defaults read -g AppleLanguages` (since environment variables like `LANG` are not usually set on macOS).
-* WASM (JavaScript), using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
 * Unix-like systems (Linux, BSD, etc.), using the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES` and `LANG` environment variables.
-* Android, using
-[`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale).
+* WASM (JavaScript), using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
+* Android, using [`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale) otherwise.
+* iOS, using [`[NSLocale preferredLanguages]`](https://developer.apple.com/documentation/foundation/nslocale/1415614-preferredlanguages).
 
 ## Usage
 
