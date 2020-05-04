@@ -45,6 +45,28 @@ func TestMultipleLocales(t *testing.T) {
 	region, err := GetRegion()
 	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "US", region)
+
+	// If "C" is set, we should ignore LANGUAGE
+	err = os.Setenv("LC_ALL", "C")
+	assert.Equal(t, nil, err, "err should be nil")
+
+	var nilStringSlice []string
+
+	locales, err = GetLocales()
+	assert.Equal(t, nil, err, "err should be nil")
+	assert.Equal(t, nilStringSlice, locales)
+
+	locale, err = GetLocale()
+	assert.Equal(t, nil, err, "err should be nil")
+	assert.Equal(t, "", locale)
+
+	lang, err = GetLanguage()
+	assert.Equal(t, nil, err, "err should be nil")
+	assert.Equal(t, "", lang)
+
+	region, err = GetRegion()
+	assert.Equal(t, nil, err, "err should be nil")
+	assert.Equal(t, "", region)
 }
 
 func TestSingleLocale(t *testing.T) {
@@ -150,18 +172,18 @@ func TestNoLocale(t *testing.T) {
 	var nilStringSlice []string
 
 	locales, err := GetLocales()
-	assert.NotEqual(t, nil, err, "err should not be nil")
+	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, nilStringSlice, locales)
 
 	locale, err := GetLocale()
-	assert.NotEqual(t, nil, err, "err should not be nil")
+	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "", locale)
 
 	lang, err := GetLanguage()
-	assert.NotEqual(t, nil, err, "err should not be nil")
+	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "", lang)
 
 	region, err := GetRegion()
-	assert.NotEqual(t, nil, err, "err should not be nil")
+	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "", region)
 }
