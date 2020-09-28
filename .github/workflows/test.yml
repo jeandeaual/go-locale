@@ -1,5 +1,21 @@
 name: test
-on: push
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '**.c'
+      - '**.m'
+      - '**.yml'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '**.c'
+      - '**.m'
+      - '**.yml'
 jobs:
   test:
     strategy:
@@ -14,7 +30,16 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
-        id: go
+      - name: Cache the Go modules
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Download the Go modules
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: go mod download
       - name: Build
         run: go build -ldflags="-s -w" ./examples/getlocale
       - name: Build (WASM)
