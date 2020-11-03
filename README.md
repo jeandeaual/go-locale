@@ -1,9 +1,9 @@
 # go-locale
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/jeandeaual/go-locale)](https://pkg.go.dev/github.com/jeandeaual/go-locale)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jeandeaual/go-locale)](https://goreportcard.com/report/github.com/jeandeaual/go-locale)
+[![Coverage Status](https://coveralls.io/repos/github/jeandeaual/go-locale/badge.svg?branch=master)](https://coveralls.io/github/jeandeaual/go-locale?branch=master)
 [![test](https://github.com/jeandeaual/go-locale/workflows/test/badge.svg)](https://github.com/jeandeaual/go-locale/actions?query=workflow%3Atest)
-[![Coverage
-Status](https://coveralls.io/repos/github/jeandeaual/go-locale/badge.svg?branch=master)](https://coveralls.io/github/jeandeaual/go-locale?branch=master)
 
 GoLang library used to retrieve the current locale(s) of the operating system.
 
