@@ -3,7 +3,7 @@ module github.com/jeandeaual/go-locale
 go 1.12
 
 require (
-	fyne.io/fyne v1.4.0
+	fyne.io/fyne v1.4.1
 	github.com/fyne-io/mobile v0.1.1
 	github.com/nicksnyder/go-i18n/v2 v2.1.1
 	github.com/stretchr/testify v1.6.1
