@@ -10,12 +10,14 @@ import (
 	"syscall"
 )
 
-func execCommand(cmd string, args ...string) (status int, out []byte, err error) {
+func execCommand(cmd string, args ...string) (status int, out string, err error) {
+	var bytesOut []byte
 	status = -1
 	command := exec.Command(cmd, args...)
 
 	// Execute the command and get the standard and error outputs
-	out, err = command.CombinedOutput()
+	bytesOut, err = command.CombinedOutput()
+	out = string(bytesOut)
 	if err != nil {
 		return
 	}
@@ -33,6 +35,12 @@ func GetLocale() (string, error) {
 	_, output, err := execCommand("defaults", "read", "-g", "AppleLocale")
 	if err != nil {
 		return "", fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
+	}
+
+	// defaults read -g AppleLocale can return a string containing additional
+	// information after the locale, e.g. "en_US@currency=USD"
+	if idx := strings.Index(output, "@"); idx != -1 {
+		output = output[:idx]
 	}
 
 	return strings.TrimRight(strings.Replace(string(output), "_", "-", 1), "\n"), nil
