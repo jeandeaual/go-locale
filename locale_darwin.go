@@ -1,3 +1,4 @@
+//go:build darwin && !ios
 // +build darwin,!ios
 
 package locale
@@ -43,7 +44,7 @@ func GetLocale() (string, error) {
 		output = output[:idx]
 	}
 
-	return strings.TrimRight(strings.Replace(string(output), "_", "-", 1), "\n"), nil
+	return strings.TrimRight(strings.Replace(output, "_", "-", 1), "\n"), nil
 }
 
 // appleLanguagesRegex is used to parse the output of "defaults read -g AppleLanguages"
@@ -62,7 +63,7 @@ func GetLocales() ([]string, error) {
 		return nil, fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
 	}
 
-	matches := appleLanguagesRegex.FindAllStringSubmatch(string(output), -1)
+	matches := appleLanguagesRegex.FindAllStringSubmatch(output, -1)
 	if len(matches) == 0 {
 		return nil, fmt.Errorf("invalid output from \"defaults read -g AppleLanguages\": %s", output)
 	}
