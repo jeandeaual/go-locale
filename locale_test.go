@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	localeRegex   = regexp.MustCompile(`^[a-z]{2}-[A-Z]{2}$`)
+	localeRegex   = regexp.MustCompile(`^[a-z]{2}(?:-[A-Z]{2})?$`)
 	languageRegex = regexp.MustCompile(`^[a-z]{2}$`)
 	regionRegex   = regexp.MustCompile(`^[A-Z]{2}$`)
 )
