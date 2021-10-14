@@ -51,7 +51,7 @@ jobs:
         # Manually set the AppleLanguages on macOS
         # Otherwise, we get the following error when running GetLocales():
         # The domain/default pair of (kCFPreferencesAnyApplication, AppleLanguages) does not exist
-        run: defaults write NSGlobalDomain AppleLanguages "(en-US, fr-FR, ja-JP)"
+        run: defaults write NSGlobalDomain AppleLanguages "(en, fr-FR, ja-JP)"
       - name: Test
         run: go test -v -race -covermode="atomic" -coverprofile="profile.cov"
       - name: Send coverage
