@@ -22,7 +22,8 @@ Go library used to retrieve the current locale(s) of the operating system.
 * Android\
     Using [`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale) otherwise.
 
-    Note: for Android, you'll first need to call `SetRunOnJVM`, depending on which mobile framework you're using:
+    *Note*: for Android, you'll first need to call `SetRunOnJVM`, depending on which mobile framework you're using:
+
     * For [Fyne](https://fyne.io/):
 
         ```go
