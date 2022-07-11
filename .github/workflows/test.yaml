@@ -4,34 +4,39 @@ on:
     branches:
       - master
     paths:
-      - '**.go'
-      - '**.c'
-      - '**.m'
-      - '**.yml'
+      - "**.go"
+      - "**.c"
+      - "**.m"
+      - "**.yml"
   pull_request:
     branches:
       - master
     paths:
-      - '**.go'
-      - '**.c'
-      - '**.m'
-      - '**.yml'
+      - "**.go"
+      - "**.c"
+      - "**.m"
+      - "**.yml"
 jobs:
   test:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        go: ['^1.12', '^1.13', '^1.14', '^1.15', '^1.16', '^1.17']
+        go:
+          - ~1.14
+          - ~1.15
+          - ~1.16
+          - ~1.17
+          - ~1.18
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go }}
       - name: Cache the Go modules
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -73,10 +78,10 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     env:
-      GOLANGCI_LINT_VERSION: '1.43.0'
+      GOLANGCI_LINT_VERSION: 1.46.2
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Download golangci-lint
         if: startsWith(matrix.os, 'windows') != true
         run: |

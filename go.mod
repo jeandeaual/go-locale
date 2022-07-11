@@ -1,6 +1,6 @@
 module github.com/jeandeaual/go-locale
 
-go 1.12
+go 1.14
 
 require (
 	fyne.io/fyne v1.4.2
