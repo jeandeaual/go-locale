@@ -19,36 +19,41 @@ Go library used to retrieve the current locale(s) of the operating system.
     Using [`navigator.language`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language) and [`navigator.languages`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/languages).
 * iOS\
     Using [`[NSLocale preferredLanguages]`](https://developer.apple.com/documentation/foundation/nslocale/1415614-preferredlanguages).
-* Android\
-    Using [`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale) otherwise.
+  * Android\
+      Using [`getResources().getConfiguration().getLocales`](https://developer.android.com/reference/android/content/res/Configuration#getLocales()) for Android N or later, or [`getResources().getConfiguration().locale`](https://developer.android.com/reference/android/content/res/Configuration#locale) otherwise.
 
-    *Note*: for Android, you'll first need to call `SetRunOnJVM`, depending on which mobile framework you're using:
+      *Note*: for Android, you'll first need to call `SetRunOnJVM`, depending on which mobile framework you're using:
 
-    * For [Fyne](https://fyne.io/):
+      * For [Fyne](https://fyne.io/):
 
-        ```go
-        import (
-        	"github.com/fyne-io/mobile/app"
-        	"github.com/jeandeaual/go-locale"
-        )
+          ```go
+          import (
+              "fyne.io/fyne/v2/driver"
+              "github.com/jeandeaual/go-locale"
+          )
 
-        func init() {
-        	locale.SetRunOnJVM(app.RunOnJVM)
-        }
-        ```
+          func init() {
+              locale.SetRunOnJVM(func(fn func(vm, env, ctx uintptr) error) {
+                  driver.RunNative(func(ctx interface{}) error {
+                      and := env.(driver.AndroidContext)
+                      fn(and.VM, and.Env, and.Ctx)
+                  })
+              })
+          }
+          ```
 
-    * For [gomobile](https://github.com/golang/go/wiki/Mobile):
+      * For [gomobile](https://github.com/golang/go/wiki/Mobile):
 
-        ```go
-        import (
-        	"golang.org/x/mobile/app"
-        	"github.com/jeandeaual/go-locale"
-        )
+          ```go
+          import (
+              "golang.org/x/mobile/app"
+              "github.com/jeandeaual/go-locale"
+          )
 
-        func init() {
-        	locale.SetRunOnJVM(app.RunOnJVM)
-        }
-        ```
+          func init() {
+              locale.SetRunOnJVM(app.RunOnJVM)
+          }
+          ```
 
 ## Usage
 
