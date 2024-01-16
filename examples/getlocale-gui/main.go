@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"fyne.io/fyne/app"
-	"fyne.io/fyne/widget"
-	"github.com/nicksnyder/go-i18n/v2/i18n"
-	"golang.org/x/text/language"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 
 	"github.com/jeandeaual/go-locale"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -77,7 +78,7 @@ func main() {
 	a := app.New()
 
 	w := a.NewWindow("Locale Information")
-	w.SetContent(widget.NewVBox(
+	w.SetContent(container.NewVBox(
 		widget.NewLabel(localizer.MustLocalize(&i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{
 				ID:    "Locales",
