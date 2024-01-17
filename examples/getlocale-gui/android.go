@@ -10,10 +10,11 @@ import (
 )
 
 func init() {
-	locale.SetRunOnJVM(func(fn func(vm, env, ctx uintptr) error) {
+	locale.SetRunOnJVM(func(fn func(vm, env, ctx uintptr) error) error {
 		driver.RunNative(func(ctx interface{}) error {
-			and := env.(driver.AndroidContext)
-			fn(and.VM, and.Env, and.Ctx)
+			and := ctx.(*driver.AndroidContext)
+			return fn(and.VM, and.Env, and.Ctx)
 		})
+		return nil
 	})
 }
