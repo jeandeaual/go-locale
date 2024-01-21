@@ -9,6 +9,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var (
+	globalLanguage string
+	globalRegion   string
+)
+
+func BenchmarkSplitLocale(b *testing.B) {
+	language := ""
+	region := ""
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		language, region = splitLocale("en_US.UTF-8")
+	}
+
+	globalLanguage = language
+	globalRegion = region
+}
+
 func TestSplitLocale(t *testing.T) {
 	language, region := splitLocale("en_US.UTF-8")
 	assert.Equal(t, "en", language)

@@ -11,18 +11,13 @@ import (
 func SetRunOnJVM(_ func(fn func(vm, env, ctx uintptr) error) error) {}
 
 func splitLocale(locale string) (string, string) {
-	// Remove the encoding, if present
-	formattedLocale := strings.Split(locale, ".")[0]
+	// Remove the encoding, if present.
+	formattedLocale, _, _ := strings.Cut(locale, ".")
+
 	// Normalize by replacing the hyphens with underscores
-	formattedLocale = strings.Replace(formattedLocale, "-", "_", -1)
+	formattedLocale = strings.ReplaceAll(formattedLocale, "-", "_")
 
-	// Split at the underscore
-	split := strings.Split(formattedLocale, "_")
-	language := split[0]
-	territory := ""
-	if len(split) > 1 {
-		territory = split[1]
-	}
-
+	// Split at the underscore.
+	language, territory, _ := strings.Cut(formattedLocale, "_")
 	return language, territory
 }
