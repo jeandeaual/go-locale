@@ -4,32 +4,16 @@
 package locale
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func resetEnv(t *testing.T) {
-	t.Log("Resetting LANGUAGE, LC_ALL, LC_MESSAGES and LANG")
-
-	for _, env := range [...]string{"LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG"} {
-		err := os.Setenv(env, "")
-		assert.Equal(t, nil, err)
-	}
-}
-
 func TestMultipleLocales(t *testing.T) {
-	resetEnv(t)
-
-	err := os.Setenv("LANGUAGE", "en_US:fr:ja")
-	assert.Equal(t, nil, err, "err should be nil")
-	err = os.Setenv("LC_ALL", "")
-	assert.Equal(t, nil, err, "err should be nil")
-	err = os.Setenv("LC_MESSAGES", "")
-	assert.Equal(t, nil, err, "err should be nil")
-	err = os.Setenv("LANG", "en_US.UTF-8")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LANGUAGE", "en_US:fr:ja")
+	t.Setenv("LC_ALL", "")
+	t.Setenv("LC_MESSAGES", "")
+	t.Setenv("LANG", "en_US.UTF-8")
 
 	locales, err := GetLocales()
 	assert.Equal(t, nil, err, "err should be nil")
@@ -48,8 +32,7 @@ func TestMultipleLocales(t *testing.T) {
 	assert.Equal(t, "US", region)
 
 	// If "C" is set, we should ignore LANGUAGE
-	err = os.Setenv("LC_ALL", "C")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LC_ALL", "C")
 
 	var nilStringSlice []string
 
@@ -71,16 +54,10 @@ func TestMultipleLocales(t *testing.T) {
 }
 
 func TestSingleLocale(t *testing.T) {
-	resetEnv(t)
-
-	err := os.Setenv("LANGUAGE", "ja_JP")
-	assert.Equal(t, nil, err, "err should be nil")
-	err = os.Setenv("LC_ALL", "en_US")
-	assert.Equal(t, nil, err, "err should be nil")
-	err = os.Setenv("LC_MESSAGES", "ko_KR")
-	assert.Equal(t, nil, err, "err should be nil")
-	err = os.Setenv("LANG", "fr_FR")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LANGUAGE", "ja_JP")
+	t.Setenv("LC_ALL", "en_US")
+	t.Setenv("LC_MESSAGES", "ko_KR")
+	t.Setenv("LANG", "fr_FR")
 
 	locales, err := GetLocales()
 	assert.Equal(t, nil, err, "err should be nil")
@@ -98,8 +75,7 @@ func TestSingleLocale(t *testing.T) {
 	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "JP", region)
 
-	err = os.Setenv("LANGUAGE", "")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LANGUAGE", "")
 
 	locale, err = GetLocale()
 	assert.Equal(t, nil, err, "err should be nil")
@@ -113,8 +89,7 @@ func TestSingleLocale(t *testing.T) {
 	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "US", region)
 
-	err = os.Setenv("LC_ALL", "")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LC_ALL", "")
 
 	locale, err = GetLocale()
 	assert.Equal(t, nil, err, "err should be nil")
@@ -128,8 +103,7 @@ func TestSingleLocale(t *testing.T) {
 	assert.Equal(t, nil, err, "err should be nil")
 	assert.Equal(t, "KR", region)
 
-	err = os.Setenv("LC_MESSAGES", "")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LC_MESSAGES", "")
 
 	locale, err = GetLocale()
 	assert.Equal(t, nil, err, "err should be nil")
@@ -145,10 +119,7 @@ func TestSingleLocale(t *testing.T) {
 }
 
 func TestLocaleNoRegion(t *testing.T) {
-	resetEnv(t)
-
-	err := os.Setenv("LANG", "fr")
-	assert.Equal(t, nil, err, "err should be nil")
+	t.Setenv("LANG", "fr")
 
 	locales, err := GetLocales()
 	assert.Equal(t, nil, err, "err should be nil")
@@ -168,9 +139,11 @@ func TestLocaleNoRegion(t *testing.T) {
 }
 
 func TestNoLocale(t *testing.T) {
-	resetEnv(t)
-
 	var nilStringSlice []string
+
+	for _, env := range [...]string{"LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG"} {
+		t.Setenv(env, "")
+	}
 
 	locales, err := GetLocales()
 	assert.Equal(t, nil, err, "err should be nil")
