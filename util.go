@@ -8,7 +8,7 @@ import (
 )
 
 // SetRunOnJVM is a noop, this function is only valid on Android
-func SetRunOnJVM(fn func(fn func(vm, env, ctx uintptr) error) error) {}
+func SetRunOnJVM(_ func(fn func(vm, env, ctx uintptr) error) error) {}
 
 func splitLocale(locale string) (string, string) {
 	// Remove the encoding, if present

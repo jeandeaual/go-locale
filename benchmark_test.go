@@ -1,3 +1,5 @@
+// Package locale implements functions to retrieve the current locale(s)
+// of the operating system.
 package locale
 
 import (
