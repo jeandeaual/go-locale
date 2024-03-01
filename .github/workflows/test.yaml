@@ -82,7 +82,7 @@ jobs:
       GOLANGCI_LINT_VERSION: 1.55.2
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download golangci-lint
         if: startsWith(matrix.os, 'windows') != true
         run: |
