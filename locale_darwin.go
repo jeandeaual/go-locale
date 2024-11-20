@@ -3,6 +3,15 @@
 
 package locale
 
+/*
+#cgo CFLAGS: -x objective-c
+#cgo LDFLAGS: -framework Foundation
+
+#include <AppKit/AppKit.h>
+
+char *preferredLocalization();
+*/
+import "C"
 import (
 	"fmt"
 	"os/exec"
@@ -33,6 +42,11 @@ func execCommand(cmd string, args ...string) (status int, out string, err error)
 
 // GetLocale retrieves the IETF BCP 47 language tag set on the system.
 func GetLocale() (string, error) {
+	str := C.preferredLocalization()
+	if output := C.GoString(str); output != "" {
+		return strings.Replace(output, "_", "-", 1), nil
+	}
+
 	_, output, err := execCommand("defaults", "read", "-g", "AppleLocale")
 	if err != nil {
 		return "", fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
