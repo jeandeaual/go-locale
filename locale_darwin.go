@@ -9,8 +9,8 @@ package locale
 
 #include <AppKit/AppKit.h>
 
-char *preferredLocalization();
-int preferredLocalizations(char ***);
+const char * preferredLocalization();
+const char * preferredLocalizations();
 */
 import "C"
 import (
@@ -19,7 +19,6 @@ import (
 	"regexp"
 	"strings"
 	"syscall"
-	"unsafe"
 )
 
 func execCommand(cmd string, args ...string) (status int, out string, err error) {
@@ -70,14 +69,12 @@ var appleLanguagesRegex = regexp.MustCompile(`([a-z]{2}(?:-[A-Z]{2})?)`)
 
 // GetLocales retrieves the IETF BCP 47 language tags set on the system.
 func GetLocales() ([]string, error) {
-	var locs **C.char
-
-	if n := C.preferredLocalizations(&locs); n > 0 {
-		r := make([]string, n)
-		for m, v := range unsafe.Slice(locs, n) {
-			r[m] = strings.Replace(C.GoString(v), "_", "-", 1)
+	str := C.preferredLocalizations()
+	if output := C.GoString(str); output != "" {
+		r := []string{}
+		for _, s := range strings.Split(output, ",") {
+			r = append(r, strings.Replace(s, "_", "-", 1))
 		}
-
 		return r, nil
 	}
 
