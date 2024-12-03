@@ -1,5 +1,4 @@
 //go:build windows || (darwin && !ios)
-// +build windows darwin,!ios
 
 package locale
 
