@@ -1,4 +1,4 @@
-// +build ios
+//go:build ios
 
 #import <UIKit/UIKit.h>
 
