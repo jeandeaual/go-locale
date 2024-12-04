@@ -2,6 +2,16 @@
 
 package locale
 
+/*
+#cgo CFLAGS: -x objective-c
+#cgo LDFLAGS: -framework Foundation
+
+#include <AppKit/AppKit.h>
+
+const char * preferredLocalization();
+const char * preferredLocalizations();
+*/
+import "C"
 import (
 	"fmt"
 	"os/exec"
@@ -32,6 +42,11 @@ func execCommand(cmd string, args ...string) (status int, out string, err error)
 
 // GetLocale retrieves the IETF BCP 47 language tag set on the system.
 func GetLocale() (string, error) {
+	str := C.preferredLocalization()
+	if output := C.GoString(str); output != "" {
+		return strings.Replace(output, "_", "-", 1), nil
+	}
+
 	_, output, err := execCommand("defaults", "read", "-g", "AppleLocale")
 	if err != nil {
 		return "", fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
@@ -53,6 +68,15 @@ var appleLanguagesRegex = regexp.MustCompile(`([a-z]{2}(?:-[A-Z]{2})?)`)
 
 // GetLocales retrieves the IETF BCP 47 language tags set on the system.
 func GetLocales() ([]string, error) {
+	str := C.preferredLocalizations()
+	if output := C.GoString(str); output != "" {
+		r := []string{}
+		for _, s := range strings.Split(output, ",") {
+			r = append(r, strings.Replace(s, "_", "-", 1))
+		}
+		return r, nil
+	}
+
 	_, output, err := execCommand("defaults", "read", "-g", "AppleLanguages")
 	if err != nil {
 		return nil, fmt.Errorf("cannot determine locale: %v (output: %s)", err, output)
