@@ -103,8 +103,6 @@ func main() {
 }
 ```
 
-For a complete example, see [here](examples/getlocale-gui/main.go).
-
 ## GetLocale
 
 `GetLocale` returns the current locale as defined in [IETF BCP 47](https://tools.ietf.org/rfc/bcp/bcp47.txt) (e.g. `"en-US"`).
