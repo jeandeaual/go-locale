@@ -1,7 +1,5 @@
 examples/getlocale/getlocale
 examples/getlocale/getlocale.exe
-examples/getlocale-gui/getlocale-gui
-examples/getlocale-gui/getlocale-gui.exe
 
 ### Go ###
 # Binaries for programs and plugins
