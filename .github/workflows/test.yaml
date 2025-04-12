@@ -61,6 +61,11 @@ jobs:
         run: defaults write NSGlobalDomain AppleLanguages "(en, fr-FR, ja-JP)"
       - name: Test
         run: go test -v -race -covermode="atomic" -coverprofile="profile.cov"
+      - name: Test without CGO
+        # no -race because it requires cgo
+        run: go test -v
+        env:
+          CGO_ENABLED: 0
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
         with:
