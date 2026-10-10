@@ -37,7 +37,7 @@ func TestNativeMatchesDefaults(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, natives)
 	clis, err := getLocalesCli()
-	if err == nil && len(clis) > 0 {
+	if assert.NoError(t, err) && assert.Len(t, clis, len(natives)) {
 		lang, _ := splitLocale(natives[0])
 		cliLang, _ := splitLocale(clis[0])
 		assert.Equal(t, cliLang, lang)

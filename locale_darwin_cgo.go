@@ -17,6 +17,7 @@ char * systemLanguages();
 */
 import "C"
 import (
+	"errors"
 	"strings"
 	"unsafe"
 )
@@ -49,7 +50,7 @@ func GetLocale() (string, error) {
 		return output, nil
 	}
 
-	return getLocaleCli()
+	return "", errors.New("couldn't determine the system locale")
 }
 
 // GetLocales retrieves the IETF BCP 47 language tags set on the system.
@@ -74,5 +75,5 @@ func GetLocales() ([]string, error) {
 		}
 	}
 
-	return getLocalesCli()
+	return nil, errors.New("couldn't determine the system locales")
 }
